@@ -1,0 +1,1356 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101510">
+<title>My Life Tracker</title>
+
+<style>
+:root {
+  --bg: #101510;
+  --panel: #181f19;
+  --panel2: #202a21;
+  --border: #2d392e;
+  --text: #edf4ed;
+  --muted: #9ba99c;
+  --green: #91e6a0;
+  --green-dark: #263f2b;
+  --danger: #ff8d8d;
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+button, input, textarea, select { font: inherit; }
+
+button {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 10px 14px;
+  color: var(--text);
+  background: var(--panel2);
+  transition: .18s ease;
+}
+
+button:hover {
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+button.primary {
+  color: #102015;
+  background: var(--green);
+  border-color: var(--green);
+  font-weight: 700;
+}
+
+button.danger {
+  color: var(--danger);
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+input, textarea, select {
+  width: 100%;
+  color: var(--text);
+  background: #111811;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 11px 12px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+label {
+  color: var(--muted);
+  font-size: .86rem;
+  display: block;
+  margin-bottom: 6px;
+}
+
+small, .muted { color: var(--muted); }
+
+.app {
+  max-width: 1320px;
+  margin: auto;
+  padding: 28px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.logo {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: var(--green-dark);
+  color: var(--green);
+  border-radius: 15px;
+  font-size: 24px;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 {
+  font-size: 1.55rem;
+  margin-bottom: 2px;
+  letter-spacing: -.5px;
+}
+
+h2 {
+  font-size: 1.08rem;
+  margin-bottom: 6px;
+}
+
+h3 {
+  font-size: .95rem;
+  margin-bottom: 8px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.welcome {
+  margin-bottom: 22px;
+}
+
+.welcome h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: -.7px;
+  margin-bottom: 5px;
+}
+
+.welcome p { color: var(--muted); margin-bottom: 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 21px;
+}
+
+.span-12 { grid-column: span 12; }
+.span-8 { grid-column: span 8; }
+.span-7 { grid-column: span 7; }
+.span-6 { grid-column: span 6; }
+.span-5 { grid-column: span 5; }
+.span-4 { grid-column: span 4; }
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.card-head p {
+  color: var(--muted);
+  font-size: .87rem;
+  margin: 3px 0 0;
+}
+
+.big-number {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -1px;
+}
+
+.green { color: var(--green); }
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #2b352b;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 15px 0 9px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--green);
+  border-radius: inherit;
+  transition: width .3s;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+}
+
+.inline-form input { min-width: 0; }
+
+.task-list {
+  display: grid;
+  gap: 9px;
+  margin-top: 17px;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #202820;
+  border: 1px solid transparent;
+}
+
+.task:hover { border-color: var(--border); }
+
+.task input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green);
+  flex-shrink: 0;
+}
+
+.task-title {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.task.done .task-title {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.delete-task {
+  padding: 5px 9px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 18px 0;
+  text-align: center;
+  font-size: .9rem;
+}
+
+.timer-display {
+  font-size: clamp(3rem, 8vw, 4.6rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  letter-spacing: -2px;
+  text-align: center;
+  margin: 17px 0;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.timer-settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.timer-settings input { width: 85px; }
+
+.quick-buttons {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.circle-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: var(--green-dark);
+  color: var(--green);
+  border-radius: 12px;
+  font-size: 19px;
+}
+
+.steps-number {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 750;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.water-total {
+  font-size: 2.5rem;
+  font-weight: 750;
+}
+
+.water-glasses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 17px 0;
+}
+
+.water-glass {
+  width: 32px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 7px 7px 10px 10px;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.water-glass.filled {
+  color: var(--green);
+  background: var(--green-dark);
+  border-color: #527a58;
+}
+
+.diary-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field { min-width: 0; }
+
+.field.full { grid-column: 1 / -1; }
+
+.field textarea { min-height: 105px; }
+
+.save-status {
+  color: var(--muted);
+  font-size: .82rem;
+  margin-top: 10px;
+}
+
+.alarm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.alarm-status {
+  margin-top: 13px;
+  padding: 11px;
+  background: #202820;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: .87rem;
+  overflow-wrap: anywhere;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 25px 0 10px;
+  font-size: .82rem;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: #102015;
+  padding: 11px 17px;
+  border-radius: 12px;
+  font-weight: 650;
+  z-index: 10;
+  box-shadow: 0 8px 35px #0006;
+  max-width: calc(100vw - 30px);
+  text-align: center;
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 900px) {
+  .span-8, .span-7, .span-6, .span-5, .span-4 {
+    grid-column: span 6;
+  }
+  .app { padding: 20px; }
+}
+
+@media (max-width: 600px) {
+  .app { padding: 15px; }
+  header { align-items: flex-start; }
+  .header-actions { max-width: 130px; }
+  .header-actions button { padding: 8px 10px; font-size: .8rem; }
+  .grid { gap: 12px; }
+  .span-8, .span-7, .span-6, .span-5, .span-4, .span-12 {
+    grid-column: span 12;
+  }
+  .card { padding: 17px; }
+  .diary-fields { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  .alarm-row { grid-template-columns: 1fr; }
+  .welcome h2 { font-size: 1.65rem; }
+  .inline-form button { padding: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <div class="logo">✳</div>
+      <div>
+        <h1>My Life Tracker</h1>
+        <div class="muted" style="font-size:.85rem">Your day, with intention.</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="exportBtn">Export data</button>
+    </div>
+  </header>
+
+  <section class="welcome">
+    <h2 id="greeting">Make today count.</h2>
+    <p id="todayLabel"></p>
+  </section>
+
+  <main class="grid">
+
+    <!-- DAILY PROGRESS -->
+    <section class="card span-12">
+      <div class="card-head">
+        <div>
+          <h2>Daily progress</h2>
+          <p>Small actions build lasting progress.</p>
+        </div>
+        <div class="circle-icon">↗</div>
+      </div>
+      <div class="big-number"><span id="progressPercent">0</span><span class="green">%</span></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+      <div class="stat-row">
+        <span id="taskSummary">0 of 0 tasks completed</span>
+        <span id="remainingSummary">Add your first task</span>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section class="card span-7">
+      <div class="card-head">
+        <div>
+          <h2>Today's tasks</h2>
+          <p>Focus on what matters today.</p>
+        </div>
+        <div class="circle-icon">✓</div>
+      </div>
+
+      <form class="inline-form" id="taskForm">
+        <input id="taskInput" type="text" maxlength="120"
+               placeholder="Add a task..." aria-label="New task" required>
+        <button class="primary" type="submit">Add</button>
+      </form>
+
+      <div class="task-list" id="taskList"></div>
+
+      <div style="margin-top:15px">
+        <button class="danger" id="clearTasksBtn">Clear today's tasks</button>
+      </div>
+    </section>
+
+    <!-- FOCUS TIMER -->
+    <section class="card span-5">
+      <div class="card-head">
+        <div>
+          <h2>Focus timer</h2>
+          <p>One thing at a time.</p>
+        </div>
+        <div class="circle-icon">◷</div>
+      </div>
+
+      <div class="timer-display" id="timerDisplay">25:00</div>
+
+      <div class="timer-settings">
+        <label for="focusMinutes" style="margin:0">Minutes</label>
+        <input id="focusMinutes" type="number" min="1" max="180" value="25">
+      </div>
+
+      <div class="quick-buttons">
+        <button type="button" class="quick-timer" data-minutes="15">15 min</button>
+        <button type="button" class="quick-timer" data-minutes="25">25 min</button>
+        <button type="button" class="quick-timer" data-minutes="50">50 min</button>
+      </div>
+
+      <div class="timer-controls">
+        <button class="primary" id="timerStart">Start</button>
+        <button id="timerReset">Reset</button>
+      </div>
+      <p class="save-status" id="timerStatus" style="text-align:center">Ready when you are.</p>
+    </section>
+
+    <!-- STOPWATCH -->
+    <section class="card span-5">
+      <div class="card-head">
+        <div>
+          <h2>Stopwatch</h2>
+          <p>Track time spent on an activity.</p>
+        </div>
+        <div class="circle-icon">⏱</div>
+      </div>
+
+      <div class="timer-display" id="stopwatchDisplay">00:00.0</div>
+      <div class="timer-controls">
+        <button class="primary" id="stopwatchStart">Start</button>
+        <button id="lapBtn">Lap</button>
+        <button id="stopwatchReset">Reset</button>
+      </div>
+      <div id="lapList" style="margin-top:14px"></div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="card span-7">
+      <div class="card-head">
+        <div>
+          <h2>Step counter</h2>
+          <p>Automatic motion-based estimate on supported devices.</p>
+        </div>
+        <div class="circle-icon">↟</div>
+      </div>
+
+      <div class="steps-number"><span id="stepsCount">0</span> <span class="muted" style="font-size:1rem;font-weight:500">steps</span></div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="stepsBar"></div>
+      </div>
+      <div class="stat-row">
+        <span id="stepsProgress">0% of 8,000 steps</span>
+        <span>Daily goal: 8,000</span>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:17px">
+        <button class="primary" id="stepsStart">Enable step counter</button>
+        <button id="stepsReset">Reset today's steps</button>
+      </div>
+      <p class="save-status" id="stepsStatus">
+        Motion sensors are required. This feature may not work on a PC.
+      </p>
+    </section>
+
+    <!-- WATER -->
+    <section class="card span-5">
+      <div class="card-head">
+        <div>
+          <h2>Water tracker</h2>
+          <p>Keep hydration on your radar.</p>
+        </div>
+        <div class="circle-icon">♧</div>
+      </div>
+
+      <div class="water-total"><span id="waterTotal">0</span><span class="muted" style="font-size:1rem"> ml</span></div>
+      <div class="stat-row">
+        <span>Daily target: <span id="waterGoalLabel">2,000 ml</span></span>
+        <span id="waterPercent">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="waterBar"></div>
+      </div>
+      <div class="water-glasses" id="waterGlasses"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="primary" id="addWater">+ 250 ml</button>
+        <button id="undoWater">Undo</button>
+        <button id="waterGoalBtn">Set goal</button>
+      </div>
+    </section>
+
+    <!-- DIARY -->
+    <section class="card span-12">
+      <div class="card-head">
+        <div>
+          <h2>Daily reflection</h2>
+          <p>Notice your progress. Learn from your day.</p>
+        </div>
+        <div class="circle-icon">✎</div>
+      </div>
+
+      <div class="diary-fields">
+        <div class="field">
+          <label for="diaryDos">What did I do well?</label>
+          <textarea id="diaryDos" placeholder="Your wins and achievements..."></textarea>
+        </div>
+        <div class="field">
+          <label for="diaryDonts">What could I improve?</label>
+          <textarea id="diaryDonts" placeholder="Habits or distractions to work on..."></textarea>
+        </div>
+        <div class="field">
+          <label for="diaryWins">My biggest win today</label>
+          <textarea id="diaryWins" placeholder="One thing I am proud of..."></textarea>
+        </div>
+        <div class="field">
+          <label for="diaryLesson">What did I learn?</label>
+          <textarea id="diaryLesson" placeholder="A lesson to remember..."></textarea>
+        </div>
+      </div>
+      <div class="save-status" id="diaryStatus">Your reflections save automatically on this device.</div>
+    </section>
+
+    <!-- ALARM -->
+    <section class="card span-12">
+      <div class="card-head">
+        <div>
+          <h2>Reminder & alarm</h2>
+          <p>Set a reminder for your next important activity.</p>
+        </div>
+        <div class="circle-icon">◷</div>
+      </div>
+
+      <form id="alarmForm">
+        <div class="alarm-row">
+          <div>
+            <label for="alarmDate">Date</label>
+            <input id="alarmDate" type="date" required>
+          </div>
+          <div>
+            <label for="alarmTime">Time</label>
+            <input id="alarmTime" type="time" required>
+          </div>
+        </div>
+        <div style="margin-bottom:13px">
+          <label for="alarmMessage">Reminder message</label>
+          <input id="alarmMessage" type="text" maxlength="150"
+                 placeholder="e.g. Start your study session" required>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="primary" type="submit">Set reminder</button>
+          <button type="button" id="cancelAlarm">Cancel reminder</button>
+        </div>
+      </form>
+      <div class="alarm-status" id="alarmStatus">No reminder is currently set.</div>
+      <p class="save-status">
+        Note: reminders work while this page is running. Browser alarms are not guaranteed if you close the page or your device sleeps.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>Progress over perfection · Your data stays in this browser.</footer>
+</div>
+
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+const DAY = () => new Date().toLocaleDateString("en-CA");
+const STORAGE_KEY = "myLifeTracker_v2";
+
+function readStore() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+let store = readStore();
+
+function saveStore() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  } catch (error) {
+    console.error(error);
+    toast("Could not save data. Check browser storage.");
+  }
+}
+
+function todayData() {
+  const day = DAY();
+  if (!store.days) store.days = {};
+  if (!store.days[day]) {
+    store.days[day] = {
+      tasks: [],
+      water: 0,
+      steps: 0,
+      diary: { dos: "", donts: "", wins: "", lesson: "" }
+    };
+  }
+  return store.days[day];
+}
+
+function toast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.remove("hidden");
+  clearTimeout(toast.timeout);
+  toast.timeout = setTimeout(() => el.classList.add("hidden"), 2600);
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+function formatNumber(n) {
+  return Math.round(n).toLocaleString();
+}
+
+// ---------- DATE AND GREETING ----------
+
+function updateHeader() {
+  const now = new Date();
+  const hour = now.getHours();
+
+  $("greeting").textContent =
+    hour < 12 ? "Good morning." :
+    hour < 17 ? "Good afternoon." :
+    hour < 21 ? "Good evening." : "Time to slow down.";
+
+  $("todayLabel").textContent = now.toLocaleDateString(undefined, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+updateHeader();
+
+// ---------- TASKS ----------
+
+function renderTasks() {
+  const data = todayData();
+  const list = $("taskList");
+
+  if (!data.tasks.length) {
+    list.innerHTML = '<div class="empty">No tasks yet. Add one small goal to get started.</div>';
+  } else {
+    list.innerHTML = data.tasks.map(task => `
+      <div class="task ${task.done ? "done" : ""}">
+        <input type="checkbox" data-task-check="${escapeHTML(task.id)}"
+          ${task.done ? "checked" : ""} aria-label="Complete task">
+        <span class="task-title">${escapeHTML(task.text)}</span>
+        <button class="delete-task" data-task-delete="${escapeHTML(task.id)}"
+          aria-label="Delete task" title="Delete task">×</button>
+      </div>
+    `).join("");
+  }
+
+  list.querySelectorAll("[data-task-check]").forEach(input => {
+    input.addEventListener("change", () => {
+      const task = todayData().tasks.find(t => t.id === input.dataset.taskCheck);
+      if (!task) return;
+      task.done = input.checked;
+      saveStore();
+      renderTasks();
+      renderProgress();
+    });
+  });
+
+  list.querySelectorAll("[data-task-delete]").forEach(button => {
+    button.addEventListener("click", () => {
+      const data = todayData();
+      data.tasks = data.tasks.filter(t => t.id !== button.dataset.taskDelete);
+      saveStore();
+      renderTasks();
+      renderProgress();
+    });
+  });
+
+  renderProgress();
+}
+
+$("taskForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const text = $("taskInput").value.trim();
+  if (!text) return;
+
+  todayData().tasks.push({
+    id: Date.now().toString() + Math.random().toString(16).slice(2),
+    text,
+    done: false
+  });
+
+  $("taskInput").value = "";
+  saveStore();
+  renderTasks();
+});
+
+$("clearTasksBtn").addEventListener("click", () => {
+  if (!confirm("Delete all of today's tasks? This cannot be undone.")) return;
+  todayData().tasks = [];
+  saveStore();
+  renderTasks();
+});
+
+function renderProgress() {
+  const tasks = todayData().tasks;
+  const completed = tasks.filter(t => t.done).length;
+  const percent = tasks.length ? Math.round(completed / tasks.length * 100) : 0;
+
+  $("progressPercent").textContent = percent;
+  $("progressBar").style.width = percent + "%";
+  $("taskSummary").textContent = `${completed} of ${tasks.length} tasks completed`;
+  $("remainingSummary").textContent = tasks.length
+    ? `${tasks.length - completed} remaining`
+    : "Add your first task";
+}
+
+// ---------- FOCUS TIMER ----------
+
+let timerInterval = null;
+let timerRemaining = 25 * 60;
+let timerEndTime = 0;
+
+function formatClock(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+function renderTimer() {
+  $("timerDisplay").textContent = formatClock(timerRemaining);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function tickTimer() {
+  timerRemaining = Math.max(0, Math.ceil((timerEndTime - Date.now()) / 1000));
+  renderTimer();
+
+  if (timerRemaining <= 0) {
+    stopTimer();
+    $("timerStart").textContent = "Start";
+    $("timerStatus").textContent = "Session complete. Take a short break.";
+    notify("Focus session complete", "Well done. Take a short break.");
+    playBeep();
+  }
+}
+
+function setTimer(minutes) {
+  stopTimer();
+  timerRemaining = Math.max(60, Math.min(180, minutes) * 60);
+  $("focusMinutes").value = Math.floor(timerRemaining / 60);
+  $("timerStart").textContent = "Start";
+  $("timerStatus").textContent = "Ready when you are.";
+  renderTimer();
+}
+
+$("focusMinutes").addEventListener("change", () => {
+  const minutes = Number($("focusMinutes").value);
+  if (!Number.isFinite(minutes) || minutes < 1 || minutes > 180) {
+    $("focusMinutes").value = 25;
+  }
+  if (!timerInterval) setTimer(Number($("focusMinutes").value));
+});
+
+document.querySelectorAll(".quick-timer").forEach(button => {
+  button.addEventListener("click", () => setTimer(Number(button.dataset.minutes)));
+});
+
+$("timerStart").addEventListener("click", () => {
+  if (timerInterval) {
+    stopTimer();
+    $("timerStart").textContent = "Resume";
+    $("timerStatus").textContent = "Timer paused.";
+    return;
+  }
+
+  if (timerRemaining <= 0) setTimer(Number($("focusMinutes").value) || 25);
+
+  timerEndTime = Date.now() + timerRemaining * 1000;
+  $("timerStart").textContent = "Pause";
+  $("timerStatus").textContent = "Stay focused. You are doing well.";
+
+  timerInterval = setInterval(tickTimer, 200);
+  tickTimer();
+});
+
+$("timerReset").addEventListener("click", () => {
+  setTimer(Number($("focusMinutes").value) || 25);
+});
+
+renderTimer();
+
+// ---------- STOPWATCH ----------
+
+let stopwatchRunning = false;
+let stopwatchStartAt = 0;
+let stopwatchElapsed = 0;
+let stopwatchInterval = null;
+let laps = [];
+
+function stopwatchTime() {
+  return stopwatchElapsed +
+    (stopwatchRunning ? performance.now() - stopwatchStartAt : 0);
+}
+
+function formatStopwatch(ms) {
+  const totalTenths = Math.floor(ms / 100);
+  const tenths = totalTenths % 10;
+  const seconds = Math.floor(totalTenths / 10) % 60;
+  const minutes = Math.floor(totalTenths / 600);
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${tenths}`;
+}
+
+function updateStopwatch() {
+  $("stopwatchDisplay").textContent = formatStopwatch(stopwatchTime());
+}
+
+$("stopwatchStart").addEventListener("click", () => {
+  if (stopwatchRunning) {
+    stopwatchElapsed += performance.now() - stopwatchStartAt;
+    stopwatchRunning = false;
+    clearInterval(stopwatchInterval);
+    $("stopwatchStart").textContent = "Resume";
+  } else {
+    stopwatchStartAt = performance.now();
+    stopwatchRunning = true;
+    $("stopwatchStart").textContent = "Pause";
+    stopwatchInterval = setInterval(updateStopwatch, 80);
+  }
+  updateStopwatch();
+});
+
+$("lapBtn").addEventListener("click", () => {
+  if (!stopwatchRunning && stopwatchElapsed === 0) {
+    toast("Start the stopwatch first.");
+    return;
+  }
+
+  laps.unshift(stopwatchTime());
+  $("lapList").innerHTML = laps.slice(0, 5).map((lap, i) => `
+    <div class="stat-row" style="padding:7px 0">
+      <span>Lap ${laps.length - i}</span>
+      <span>${formatStopwatch(lap)}</span>
+    </div>
+  `).join("");
+});
+
+$("stopwatchReset").addEventListener("click", () => {
+  clearInterval(stopwatchInterval);
+  stopwatchRunning = false;
+  stopwatchElapsed = 0;
+  laps = [];
+  $("stopwatchStart").textContent = "Start";
+  $("lapList").innerHTML = "";
+  updateStopwatch();
+});
+
+updateStopwatch();
+
+// ---------- STEP COUNTER ----------
+
+const STEP_GOAL = 8000;
+let motionEnabled = false;
+let lastStepAt = 0;
+let lastMagnitude = 0;
+let stepPermissionHandler = null;
+
+function renderSteps() {
+  const steps = todayData().steps || 0;
+  const percent = Math.min(100, Math.round(steps / STEP_GOAL * 100));
+
+  $("stepsCount").textContent = formatNumber(steps);
+  $("stepsBar").style.width = percent + "%";
+  $("stepsProgress").textContent = `${percent}% of ${formatNumber(STEP_GOAL)} steps`;
+}
+
+function handleMotion(event) {
+  const a = event.accelerationIncludingGravity;
+  if (!a || a.x == null || a.y == null || a.z == null) return;
+
+  const magnitude = Math.sqrt(a.x*a.x + a.y*a.y + a.z*a.z);
+  const now = Date.now();
+  const change = Math.abs(magnitude - lastMagnitude);
+
+  // Basic motion-based estimate, not a medical-grade step counter.
+  if (change > 2.0 && now - lastStepAt > 300) {
+    lastStepAt = now;
+    todayData().steps = (todayData().steps || 0) + 1;
+    saveStore();
+    renderSteps();
+  }
+
+  lastMagnitude = magnitude;
+}
+
+async function enableSteps() {
+  if (!("DeviceMotionEvent" in window)) {
+    $("stepsStatus").textContent =
+      "Motion sensors are not available here. Try a compatible smartphone.";
+    return;
+  }
+
+  try {
+    if (typeof DeviceMotionEvent.requestPermission === "function") {
+      const permission = await DeviceMotionEvent.requestPermission();
+      if (permission !== "granted") {
+        $("stepsStatus").textContent = "Motion permission was not granted.";
+        return;
+      }
+    }
+
+    if (!motionEnabled) {
+      window.addEventListener("devicemotion", handleMotion);
+      motionEnabled = true;
+    }
+
+    $("stepsStart").textContent = "Step counter enabled";
+    $("stepsStatus").textContent =
+      "Listening for movement. Keep your phone with you while walking.";
+    toast("Step counter enabled");
+  } catch (error) {
+    $("stepsStatus").textContent =
+      "Could not enable motion tracking. Try HTTPS or localhost on your phone.";
+  }
+}
+
+$("stepsStart").addEventListener("click", enableSteps);
+
+$("stepsReset").addEventListener("click", () => {
+  if (!confirm("Reset today's step count?")) return;
+  todayData().steps = 0;
+  saveStore();
+  renderSteps();
+});
+
+renderSteps();
+
+// ---------- WATER TRACKER ----------
+
+let waterGoal = Number(store.waterGoal) || 2000;
+
+function renderWater() {
+  const total = todayData().water || 0;
+  const percent = Math.min(100, Math.round(total / waterGoal * 100));
+  const glassCount = Math.ceil(waterGoal / 250);
+
+  $("waterTotal").textContent = formatNumber(total);
+  $("waterGoalLabel").textContent = formatNumber(waterGoal) + " ml";
+  $("waterPercent").textContent = percent + "%";
+  $("waterBar").style.width = percent + "%";
+
+  const filled = Math.floor(total / 250);
+  $("waterGlasses").innerHTML = Array.from(
+    { length: Math.min(glassCount, 24) },
+    (_, i) => `<div class="water-glass ${i < filled ? "filled" : ""}" title="${(i+1)*250} ml">${i < filled ? "✓" : "·"}</div>`
+  ).join("");
+}
+
+$("addWater").addEventListener("click", () => {
+  todayData().water = (todayData().water || 0) + 250;
+  saveStore();
+  renderWater();
+});
+
+$("undoWater").addEventListener("click", () => {
+  todayData().water = Math.max(0, (todayData().water || 0) - 250);
+  saveStore();
+  renderWater();
+});
+
+$("waterGoalBtn").addEventListener("click", () => {
+  const answer = prompt("Set your daily water target in ml:", waterGoal);
+  if (answer === null) return;
+
+  const value = Number(answer);
+  if (!Number.isFinite(value) || value < 250 || value > 10000) {
+    toast("Enter a goal between 250 and 10,000 ml.");
+    return;
+  }
+
+  waterGoal = Math.round(value / 250) * 250;
+  store.waterGoal = waterGoal;
+  saveStore();
+  renderWater();
+});
+
+renderWater();
+
+// ---------- DAILY DIARY ----------
+
+const diaryFields = {
+  diaryDos: "dos",
+  diaryDonts: "donts",
+  diaryWins: "wins",
+  diaryLesson: "lesson"
+};
+
+let diarySaveTimeout;
+
+function loadDiary() {
+  const diary = todayData().diary || {};
+  Object.entries(diaryFields).forEach(([elementId, key]) => {
+    $(elementId).value = diary[key] || "";
+  });
+  $("diaryStatus").textContent = "Your reflections save automatically on this device.";
+}
+
+Object.entries(diaryFields).forEach(([elementId, key]) => {
+  $(elementId).addEventListener("input", () => {
+    clearTimeout(diarySaveTimeout);
+    $("diaryStatus").textContent = "Saving...";
+
+    diarySaveTimeout = setTimeout(() => {
+      const diary = todayData().diary;
+      diary[key] = $(elementId).value;
+      saveStore();
+      $("diaryStatus").textContent = "Saved locally · " +
+        new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }, 350);
+  });
+});
+
+loadDiary();
+
+// ---------- ALARM AND REMINDER ----------
+
+let alarmTimeout = null;
+let currentAlarm = null;
+let audioContext = null;
+
+function playBeep() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    audioContext = audioContext || new AudioContextClass();
+    if (audioContext.state === "suspended") audioContext.resume();
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = 880;
+    gain.gain.value = 0.16;
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.6);
+  } catch (error) {
+    console.warn("Audio unavailable", error);
+  }
+}
+
+function notify(title, message) {
+  toast(`${title}: ${message}`);
+  playBeep();
+
+  if ("Notification" in window && Notification.permission === "granted") {
+    try {
+      new Notification(title, { body: message });
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+}
+
+function cancelAlarm(showMessage = true) {
+  clearTimeout(alarmTimeout);
+  alarmTimeout = null;
+  currentAlarm = null;
+
+  $("alarmStatus").textContent = "No reminder is currently set.";
+  if (showMessage) toast("Reminder cancelled.");
+}
+
+$("alarmForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const date = $("alarmDate").value;
+  const time = $("alarmTime").value;
+  const message = $("alarmMessage").value.trim();
+
+  if (!date || !time || !message) {
+    toast("Fill in the date, time and message.");
+    return;
+  }
+
+  const target = new Date(`${date}T${time}`).getTime();
+  const delay = target - Date.now();
+
+  if (!Number.isFinite(target) || delay <= 0) {
+    toast("Choose a future date and time.");
+    return;
+  }
+
+  if (delay > 2147480000) {
+    toast("Choose a reminder within about 24 days.");
+    return;
+  }
+
+  cancelAlarm(false);
+  currentAlarm = { target, message };
+
+  if ("Notification" in window && Notification.permission === "default") {
+    try {
+      await Notification.requestPermission();
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  $("alarmStatus").textContent =
+    `Reminder set for ${new Date(target).toLocaleString()}: ${message}`;
+
+  alarmTimeout = setTimeout(() => {
+    const alarm = currentAlarm;
+    currentAlarm = null;
+    alarmTimeout = null;
+
+    if (!alarm) return;
+
+    notify("Reminder", alarm.message);
+    $("alarmStatus").textContent = "Reminder triggered: " + alarm.message;
+  }, delay);
+
+  toast("Reminder set.");
+});
+
+$("cancelAlarm").addEventListener("click", () => cancelAlarm());
+
+// Default date and time inputs
+const now = new Date();
+$("alarmDate").value = DAY();
+$("alarmTime").value = `${String((now.getHours()+1)%24).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+
+if ($("alarmTime").value <= now.toTimeString().slice(0,5)) {
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  $("alarmDate").value =
+    `${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,"0")}-${String(tomorrow.getDate()).padStart(2,"0")}`;
+}
+
+// ---------- EXPORT BACKUP ----------
+
+$("exportBtn").addEventListener("click", () => {
+  // Include pending diary input so the latest edits are included.
+  const diary = todayData().diary;
+  Object.entries(diaryFields).forEach(([elementId, key]) => {
+    diary[key] = $(elementId).value;
+  });
+
+  saveStore();
+
+  const backup = {
+    exportedAt: new Date().toISOString(),
+    app: "My Life Tracker",
+    version: 2,
+    data: store
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {
+    type: "application/json"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `my-life-tracker-${DAY()}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+
+  toast("Backup downloaded.");
+});
+
+// ---------- DAILY REFRESH ----------
+
+let activeDay = DAY();
+
+function refreshForNewDay() {
+  if (DAY() === activeDay) return;
+
+  activeDay = DAY();
+  updateHeader();
+  renderTasks();
+  renderSteps();
+  renderWater();
+  loadDiary();
+}
+
+setInterval(refreshForNewDay, 30000);
+
+</script>
+</body>
+</html>
